@@ -1,6 +1,95 @@
+/**
+ * Need to create some script properties that store the credentials for 
+ */
+
+
+/**
+ * Will schedule the post to be sent out
+ */
+function SchedulePost(){
+
+}
+
+/**
+ * Will send out a draft of your post
+ */
+function SendOutDraftPost(){
+  var postObject = GetPostDetails();
+  
+}
+
+/**
+ * Will create the Post Sheet if it is not there
+ */
+function CreatePostSheet(){
+  var ui = SpreadsheetApp.getUi();
+  if(CheckIfSheetExists('Post') == true){
+    ui.alert('Sheet already exists: Post');
+  } else{
+    ss.insertSheet('Post');
+    FormatPostSheet();
+  }
+}
+
+/**
+ * This will format the Post Sheet
+ * @param {SpreadsheetApp.Sheet} postSheet
+ */
+function FormatPostSheet(){
+  var postSheet = ss.getSheetByName('Post');
+  postSheet.clear();
+  var labels = ['Title','Subtitle','Link','Date','Time (EST)'];
+  var labelRow = 1;
+  for(var i = 0; i < labels.length; i++){
+    postSheet.getRange(labelRow,1).setValue(labels[i]);
+    labelRow = labelRow + 1;
+  }
+  
+  var fillIn = ['(Insert Title)', '(Insert Subtitle)', '(Insert Link)','(Insert Date)','(Insert Time)'];
+  var fillInRow = 1;
+  for(var i = 0; i < fillIn.length; i++){
+    postSheet.getRange(fillInRow,2).setValue(fillIn[i]);
+    fillInRow = fillInRow + 1;
+  }
+
+  var example = ['Example Input','5/6/2021', '6:45 PM']
+  var exampleRow = 3;
+  for(var i = 0; i < example.length; i++){
+    postSheet.getRange(exampleRow,3).setValue(example[i]);
+    exampleRow = exampleRow + 1;
+  }
+}
+
+/**
+ * This will tell you if a sheet with the given name exists
+ * @param {string} sheetName
+ */
+function CheckIfSheetExists(sheetName){
+  var sheets = ss.getSheets().map(x => x.getName());
+  var test = sheets.includes('Post');
+  if(sheets.includes(sheetName) == true){
+    //Logger.log(`There is a sheet called ${sheetName}`);
+    return true;
+  } else{
+    return false
+  }
+}
+
+
+/**
+ * Gets the details of the post
+ * @returns {Object}
+ */
 function GetPostDetails(){
-  var postData = postSheet.getDataRange().getValues();
-  Logger.log(postData);
+  var postData = postSheet.getRange(1,2,5,1).getValues();
+  var postObject = new Object();
+  postObject.title = postData[0][0];
+  postObject.subtitle = postData[1][0];
+  postObject.link = postData[2][0];
+  postObject.date = postData[3][0];
+  postObject.time = postData[4][0];
+  
+  return postObject
 }
 
 
