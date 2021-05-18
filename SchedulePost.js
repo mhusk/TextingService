@@ -7,15 +7,90 @@
  * Will schedule the post to be sent out
  */
 function SchedulePost(){
+  var date = String(GetUserInput('Enter the date you want to send post \n \n (Format Help: 5/18)'));
+  // Need to create a function called GetDate() will need to handle all the error handling and looping
+  var monthDay = 0;
+  var hour = 0;
+  var minute = 0;
+  if(date == 'CLOSE'){
+    UIAlert('Your post will not be sent')
+    return
+  } else{
+    date = date.split('/');
+    if(date.length < 2){
+      UIAlert('The Date is not in the correct format \n \n Format Help: 5/18');
+      return
+    } else{
+      monthDay = date[1];
+      var time = String(GetUserInput('Enter the time you want to send the post \n \n (Format Help: 6:00 PM)'));
+      time = time.split(':');
+      var amPM = time[1].split(' ');
+      if(amPM.length < 2){
+        UIAlert('Your time was not formatted correctly. \n \n Make sure to include a space between the time and AM or PM');
+        // Need to create a function called GetTime()
+      } else{
 
+      }
+    }
+  }
+}
+
+/**
+ * Will return the day, month and year the user wants to schedule the post.
+ */
+function GetDate(){
+  
 }
 
 /**
  * Will send out a draft of your post
  */
 function SendOutDraftPost(){
-  var postObject = GetPostDetails();
-  
+  var ui = SpreadsheetApp.getUi();
+  var input = postSheet.getRange(1,2).getValue();
+  var unsubMessage = 'Reply Stop to unsubscribe from this messaging service';
+  var message = input + '\n \n' + unsubMessage;
+  Logger.log(message);
+  var userInput_phoneNumber = GetUserInput('Enter the phone number you want to send the draft post to:');
+  if(userInput_phoneNumber == 'CLOSE'){
+    ui.alert('No number was entered');
+    return
+  } else{
+    var phoneNumber_DRAFT = FormatPhoneNumber(userInput_phoneNumber);
+    //Error handling if it spits back an error.
+    TwilioLibrary.sendSms(phoneNumber_DRAFT,message,sid,auth,twilNum);
+  }
+}
+
+/**
+ * Take in a phone number and format the phone number.
+ * @param {string} input
+ */
+function FormatPhoneNumber(input){
+  return TwilioLibrary.lookup(input,sid,auth).national_format;
+}
+
+/**
+ * Will take in user data using a pop-up text entry.
+ */
+function GetUserInput(question){
+  var ui = SpreadsheetApp.getUi();
+  var prompt = ui.prompt(question)
+  var userInput = prompt.getResponseText();
+  var buttonPress = prompt.getSelectedButton();
+  if(buttonPress === ui.Button.CLOSE){
+    return buttonPress
+  }
+  return userInput
+}
+
+/**
+ * A UI Alert for the user.
+ * @param {string} message - the message you want the user to read.
+ */
+function UIAlert(message){
+  var ui = SpreadsheetApp.getUi();
+  ui.alert(message);
 }
 
 /**
@@ -38,25 +113,22 @@ function CreatePostSheet(){
 function FormatPostSheet(){
   var postSheet = ss.getSheetByName('Post');
   postSheet.clear();
-  var labels = ['Title','Subtitle','Link','Date','Time (EST)'];
+  var labels = ['Message'];
+  //var labels = ['Title','Subtitle','Link','Date','Time (EST)'];
   var labelRow = 1;
   for(var i = 0; i < labels.length; i++){
-    postSheet.getRange(labelRow,1).setValue(labels[i]);
+    postSheet.getRange(labelRow,1).setValue(labels[i]).setVerticalAlignment('middle');
     labelRow = labelRow + 1;
   }
   
-  var fillIn = ['(Insert Title)', '(Insert Subtitle)', '(Insert Link)','(Insert Date)','(Insert Time)'];
+  var fillIn = ['(Insert Message Here!)' + '\n \n'+ 'Use [Option/Alt + Enter] to get a new line']
+  //var fillIn = ['(Insert Title)', '(Insert Subtitle)', '(Insert Link)','(Insert Date)','(Insert Time)'];
   var fillInRow = 1;
   for(var i = 0; i < fillIn.length; i++){
-    postSheet.getRange(fillInRow,2).setValue(fillIn[i]);
+    postSheet.getRange(fillInRow,2).setValue(fillIn[i]).setVerticalAlignment('middle');
+    postSheet.setRowHeight(1,200);
+    postSheet.setColumnWidth(2,300);
     fillInRow = fillInRow + 1;
-  }
-
-  var example = ['Example Input','5/6/2021', '6:45 PM']
-  var exampleRow = 3;
-  for(var i = 0; i < example.length; i++){
-    postSheet.getRange(exampleRow,3).setValue(example[i]);
-    exampleRow = exampleRow + 1;
   }
 }
 
@@ -76,21 +148,21 @@ function CheckIfSheetExists(sheetName){
 }
 
 
-/**
- * Gets the details of the post
- * @returns {Object}
- */
-function GetPostDetails(){
-  var postData = postSheet.getRange(1,2,5,1).getValues();
-  var postObject = new Object();
-  postObject.title = postData[0][0];
-  postObject.subtitle = postData[1][0];
-  postObject.link = postData[2][0];
-  postObject.date = postData[3][0];
-  postObject.time = postData[4][0];
+// /**
+//  * Gets the details of the post
+//  * @returns {Object}
+//  */
+// function GetPostDetails(){
+//   var postData = postSheet.getRange(1,2,5,1).getValues();
+//   var postObject = new Object();
+//   postObject.title = postData[0][0];
+//   postObject.subtitle = postData[1][0];
+//   postObject.link = postData[2][0];
+//   postObject.date = postData[3][0];
+//   postObject.time = postData[4][0];
   
-  return postObject
-}
+//   return postObject
+// }
 
 
 

@@ -12,8 +12,11 @@ function onOpen(){
     .addItem('Test Credentials','TestTwilioCredentials'))
   .addSeparator()
   .addSubMenu(ui.createMenu('Post')
+    .addItem('Schedule Post', 'SchedulePost')
     .addItem('Create Post Sheet','CreatePostSheet')
-    .addItem('Format Post Sheet','FormatPostSheet'))
+    .addItem('Format Post Sheet','FormatPostSheet')
+    .addSeparator()
+    .addItem('Send out Draft Post','SendOutDraftPost'))
     .addToUi();
 }
 
