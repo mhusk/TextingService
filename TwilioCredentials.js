@@ -1,6 +1,9 @@
 function CheckProperties(){
   var test = ScriptProperties.getProperties()
-  Logger.log(test);
+  var properties = PropertiesService.getScriptProperties();
+  Logger.log(properties.getProperties())
+  properties.setProperty()
+  //Logger.log(test);
 }
 
 function SetTwilioSID(){
@@ -79,12 +82,17 @@ function TestTwilioCredentials(){
 function GetUserPhoneNumber(){
   var ui = SpreadsheetApp.getUi();
   var prompt = ui.prompt('Enter your phone number so we can validate Twilio Credentials');
-  try{
-    var userInput = TwilioLibrary.lookup(prompt.getResponseText(),sid, auth).national_format;
-  } catch(e){
-    ui.alert('Re-enter your phone number');
+  if(prompt.getSelectedButton() == 'CLOSE'){
+    return
+  } else{
+    try{
+      var userInput = TwilioLibrary.lookup(prompt.getResponseText(),sid, auth).national_format;
+    } catch(e){
+      ui.alert('Re-enter your phone number');
+      GetUserPhoneNumber();
+    }
+    return userInput; 
   }
-  return userInput; 
 }
 
 /**

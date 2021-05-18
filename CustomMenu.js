@@ -13,10 +13,10 @@ function onOpen(){
   .addSeparator()
   .addSubMenu(ui.createMenu('Post')
     .addItem('Schedule Post', 'SchedulePost')
-    .addItem('Create Post Sheet','CreatePostSheet')
-    .addItem('Format Post Sheet','FormatPostSheet')
+    .addItem('Send out Draft Post','SendOutDraftPost')
     .addSeparator()
-    .addItem('Send out Draft Post','SendOutDraftPost'))
+    .addItem('Create Post Sheet','CreatePostSheet')
+    .addItem('Format Post Sheet','FormatPostSheet'))
     .addToUi();
 }
 
