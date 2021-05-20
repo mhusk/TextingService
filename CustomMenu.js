@@ -1,3 +1,5 @@
+
+
 function onOpen(){
   var ui = SpreadsheetApp.getUi();
   ui.createMenu('Custom Menu')
@@ -17,6 +19,11 @@ function onOpen(){
     .addSeparator()
     .addItem('Create Post Sheet','CreatePostSheet')
     .addItem('Format Post Sheet','FormatPostSheet'))
+  .addSubMenu(ui.createMenu('Welcome Message')
+    .addItem('Create Welcome Sheet', 'CreateWelcomeSheet')
+    .addItem('Format Welcome Sheet','FormatWelcomeSheet')
+    .addSeparator()
+    .addItem('Send Test Welcome Message','TestWelcomeMessage'))
     .addToUi();
 }
 

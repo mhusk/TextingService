@@ -1,9 +1,9 @@
 var properties = PropertiesService.getScriptProperties();
 
-/**
- * Need to create some script properties that store the credentials for 
- */
 
+/**
+ * Sends the post to all subscribers
+ */
 function SendPost(){
   var phoneNumberArr = GetSubscriberPhoneNumbers();
   var message = CreatePost();
@@ -298,7 +298,7 @@ function CheckIfSheetExists(sheetName){
 
 
 
-
+// All below can be deleted
 
 
 
