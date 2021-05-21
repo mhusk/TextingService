@@ -6,8 +6,14 @@ var updateSheet = ss.getSheetByName('Update');
 var sid = ScriptProperties.getProperty('sid')
 var auth = ScriptProperties.getProperty('auth')
 var twilNum = ScriptProperties.getProperty('twilNum');
+var properties = PropertiesService.getScriptProperties();
 
 // var welcomeMessage = ss.getSheetByName('Welcome Message').getRange('b1').getValue();
 
 var twilioCompliance = '\n \n'+'Msg&data rates may apply \n' + 'Reply Stop to unsubscribe from this messaging service';
 
+//Global Functions
+
+function DeletePropery(key){
+  properties.deleteProperty(key);
+}
