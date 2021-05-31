@@ -6,6 +6,8 @@ function doGet(e){
     var reply = Join(sender);
     //var reply = ContentService.createTextOutput(welcomeMessage);
     return reply; 
+  } else if(body == 'SHARE'){
+    ShareMessage(sender);
   } else{
     reply = ContentService.createTextOutput('I do not recognize this command');
     return reply
