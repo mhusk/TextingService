@@ -8,9 +8,31 @@ function SendPost(){
   var phoneNumberArr = GetSubscriberPhoneNumbers();
   var message = CreatePost();
   for(var i = 0; i < phoneNumberArr.length; i++){
-    var phoneNumber = phoneNumberArr[i]
-    TwilioLibrary.sendSms(phoneNumber,message,sid, auth, twilNum);
+    var row = 2+i;
+    if(GetLatestPostValidation(row)){
+      Logger.log('Send Post: Message has already been sent.')
+    } else{
+      var phoneNumber = phoneNumberArr[i];
+      TwilioLibrary.sendSms(phoneNumber,message,sid, auth, twilNum);
+      UpdateLatestPostValidation(row);
+    }
   }
+}
+
+/**
+ * Updates that the latest post has been sent column
+ * @param {number} row - row that I am updating value
+ */
+function UpdateLatestPostValidation(row){
+  subscriberSheet.getRange(row,3).setValue(true);
+}
+
+/**
+ * Tells if the latest post has been sent. 
+ * @param {number} row - row that you are getting value from
+ */
+function GetLatestPostValidation(row){
+  return subscriberSheet.getRange(row,3).getValue();
 }
 
 /**

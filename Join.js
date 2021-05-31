@@ -1,5 +1,6 @@
 var welcomeMessage = ss.getSheetByName('Welcome Message').getRange('b1').getValue();
 
+
 /**
  * This will add a subscriber to our subscriber list
  * @param {string} phoneNumber
@@ -9,10 +10,12 @@ function Join(phoneNumber){
   phoneNumber = TwilioLibrary.lookup(phoneNumber,sid,auth).national_format;
   if(CheckForDuplicates(phoneNumber) == true){
     var message = 'You are already a subscriber!';
-    return ContentService.createTextOutput(message);
+    var output = ContentService.createTextOutput(message);
+    return output
   } else{
     subscriberSheet.appendRow([timeStamp, phoneNumber]);
-    return ContentService.createTextOutput(welcomeMessage);
+    var output = ContentService.createTextOutput(welcomeMessage);
+    return output
   }
   //SendWelcomeText(phoneNumber);
 }
